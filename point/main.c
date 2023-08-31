@@ -1,5 +1,11 @@
 #include <GLFW/glfw3.h>
+
+// Incluir la librería de OpenGL
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 void drawPixel(float x, float y) {
     glPointSize(1.0f); // Tamaño del píxel
