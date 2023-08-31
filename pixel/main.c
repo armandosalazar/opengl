@@ -10,6 +10,8 @@ int main() {
 	if (!glfwInit()) {
 		fprintf(stderr, "Error al inicializar GLFW\n");
 		return 1;
+	} else {
+		fprintf(stdout, "Inicialización de GLFW exitosa\n");
 	}
 
 	// Crear ventana
@@ -19,6 +21,8 @@ int main() {
 		fprintf(stderr, "Error al crear ventana GLFW\n");
 		glfwTerminate();
 		return 1;
+	} else {
+		fprintf(stdout, "Creación de ventana GLFW exitosa\n");
 	}
 
 	// Seleccionar ventana
@@ -26,19 +30,18 @@ int main() {
 
 	// Ciclo de dibujado
 	while (!glfwWindowShouldClose(window)) {
-		// Establecer color de fondo
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
 		// Limpiar el buffer de color
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Dibujar un píxel rojo en el centro de la ventana (320, 240)
-		glPointSize(1.0f);
-		glBegin(GL_POINTS);
+		// Dibujar primitivas
+		glBegin(GL_TRIANGLES);
 		glColor3f(1.0f, 0.0f, 0.0f);
-		glVertex2f(0.0f, 0.0f);
+		glVertex2f(-0.5f, -0.5f);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex2f(0.5f, -0.5f);
+		glColor3f(0.0f, 0.0f, 1.0f);
+		glVertex2f(0.0f, 0.5f);
 		glEnd();
-
 
 		// Intercambiar buffers
 		glfwSwapBuffers(window);
