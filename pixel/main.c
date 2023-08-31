@@ -29,20 +29,16 @@ int main() {
 		// Establecer color de fondo
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-		// Renderizar
-		// ...
-		// Dibujar un cuadrado de un pixel de (0, 0) a (1, 1) en la pantalla (640x480) con color rojo
-		glBegin(GL_QUADS);
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glVertex2f(0.0f, 0.0f);
-		glVertex2f(1.0f, 0.0f);
-		glVertex2f(1.0f, -1.0f);
-		glVertex2f(0.0f, -1.0f);
-		glEnd();
-		// ...
-
 		// Limpiar el buffer de color
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		// Dibujar un píxel rojo en el centro de la ventana (320, 240)
+		glPointSize(1.0f);
+		glBegin(GL_POINTS);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glVertex2f(0.0f, 0.0f);
+		glEnd();
+
 
 		// Intercambiar buffers
 		glfwSwapBuffers(window);
