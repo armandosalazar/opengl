@@ -1,5 +1,5 @@
 #include <GLFW/glfw3.h>
-#include <OpenGL/gl.h>
+#include <GL/gl.h>
 
 void drawPixel(float x, float y) {
     glPointSize(1.0f); // Tamaño del píxel

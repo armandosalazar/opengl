@@ -7,6 +7,7 @@
 * Para instalar GLFW en Linux, abra una terminal y ejecute el siguiente comando:
 ```
 sudo apt-get install libglfw3
+sudo pacman -S glfw-x11
 ```
 * Para instalar GLFW en Windows, descargue el binario de la página de descargas de GLFW y descomprímalo en un directorio de su elección.
 * Para instalar GLFW en Mac OS X, descargue el binario de la página de descargas de GLFW y descomprímalo en un directorio de su elección o use Homebrew y ejecute el siguiente comando:
