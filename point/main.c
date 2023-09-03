@@ -68,6 +68,7 @@ int main() {
 
     // Establecer el contexto de OpenGL
     glfwMakeContextCurrent(window);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     // Ciclo principal
     while (!glfwWindowShouldClose(window)) {
