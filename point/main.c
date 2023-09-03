@@ -8,7 +8,7 @@
 #endif
 
 void drawPixel(float x, float y) {
-    glPointSize(1.0f); // Tamaño del píxel
+    glPointSize(1); // Tamaño del píxel
     glBegin(GL_POINTS);
     glVertex2f(x, y);  // Coordenadas del píxel
     glEnd();
@@ -27,6 +27,7 @@ int main() {
     }
 
     glfwMakeContextCurrent(window);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     // Ciclo principal
     while (!glfwWindowShouldClose(window)) {
