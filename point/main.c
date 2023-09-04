@@ -2,14 +2,10 @@
 
 // Incluir la librería de GLFW
 #define GL_SILENCE_DEPRECATION 1
-
 #include <GLFW/glfw3.h>
-
 // Incluir la librería de OpenGL
 #ifdef __APPLE__
-
 #include <OpenGL/gl.h>
-
 #else
 #include <GL/gl.h>
 #endif

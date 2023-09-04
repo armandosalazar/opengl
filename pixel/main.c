@@ -3,7 +3,11 @@
 
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 int main() {
 	// Inicializar GLFW
