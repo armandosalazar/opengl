@@ -1,4 +1,4 @@
 #!/bin/bash
 
-mkdir build
-cd build && cmake .. && make && ./open_gl && cd ..
+mkdir -p build
+cd build && cmake .. && make && ./open_gl_pixel && cd ..

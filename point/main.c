@@ -78,6 +78,7 @@ int main() {
     }
 
     // Terminar GLFW
+    glfwDestroyWindow(window);
     glfwTerminate();
 
     return 0;
