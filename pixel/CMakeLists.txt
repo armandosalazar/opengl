@@ -4,7 +4,7 @@ project(open_gl_pixel)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 
-
-add_executable(open_gl_pixel main.c)
+add_executable(open_gl_pixel main.c
+        graphics.h)
 
 target_link_libraries(open_gl_pixel OpenGL::GL glfw m)
