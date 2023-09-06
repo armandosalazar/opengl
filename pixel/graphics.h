@@ -33,6 +33,34 @@ void lineDDA(int x1, int y1, int x2, int y2) {
     }
 }
 
+void lineBresenham(int x1, int y1, int x2, int y2) {
+	int dx = x2 - x1;
+	int dy = y2 - y1;
+	int p = 2 * dy - dx, twoDy = 2 * dy, twoDyMinusDx = 2 * (dy - dx), x, y;
+
+	if (x1 > x2) {
+		x = x2;
+		y = y2;
+		x2 = x1;
+	} else {
+		x = x1;
+		y = y1;
+	}
+
+	putPixel(x, y);
+
+	while (x < x2) {
+		x++;
+		if (p < 0) {
+			p += twoDy;
+		} else {
+			y++;
+			p += twoDyMinusDx;
+		}
+		putPixel(x, y);
+	}
+}
+
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE) {
         glfwSetWindowShouldClose(window, GL_TRUE);

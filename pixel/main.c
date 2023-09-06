@@ -1,13 +1,14 @@
 //
 // Created by Armando Salazar on 05/09/23.
 //
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #define GL_SILENCE_DEPRECATION 1
 
-#include <GLFW/glfw3.h>
 #include <OpenGL/gl.h>
+#include <GLFW/glfw3.h>
 
 #include "graphics.h"
 
@@ -25,6 +26,9 @@ void display() {
 
     glColor3f(0.0f, 0.0f, 1.0f); // Establecer color azul
     lineDDA(0, 0, 150, 100); // Dibujar linea
+	
+	glColor3f(1.0f, 1.0f, 0.0f); // Establecer color amarillo
+	lineBresenham(0, 0, 150, 150);   // Dibujar linea
 
     glFlush(); // Enviar a dibujar
 }
