@@ -29,8 +29,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-	// glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	GLFWwindow *window = glfwCreateWindow(800, 500, "ImGui", NULL, NULL);
 
 	if (!window)
@@ -51,9 +50,9 @@ int main()
 
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-	int screen_width, screen_height;
-	glfwGetFramebufferSize(window, &screen_width, &screen_height);
-	glViewport(0, 0, screen_width, screen_height);
+	// int screen_width, screen_height;
+	// glfwGetFramebufferSize(window, &screen_width, &screen_height);
+	// glViewport(0, 0, screen_width, screen_height);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -62,7 +61,9 @@ int main()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	ImGui::StyleColorsDark();
+	// ImGui::StyleColorsDark();
+	// ImGui::StyleColorsClassic();
+	ImGui::StyleColorsLight();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -74,7 +75,6 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		// render your GUI
 		ImGui::Begin("Demo window");
 		ImGui::Button("Hello!");
 		ImGui::End();

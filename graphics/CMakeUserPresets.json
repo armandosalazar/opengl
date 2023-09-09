@@ -1,0 +1,9 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/Users/armando/opengl/graphics/build/Release/generators/CMakePresets.json"
+    ]
+}
