@@ -18,6 +18,8 @@ void display()
 	// putPixel(100, 100);
 	glBegin(GL_POINTS);
 	glVertex2i(100, 100);
+	glVertex2f(200.0, 200.0);
+	glVertex2i(0, 0);
 	glEnd();
 	glFlush();
 }
@@ -58,7 +60,7 @@ int main()
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, keyCallback);
-	// glfwSwapInterval(1);
+	glfwSwapInterval(1);
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -84,7 +86,9 @@ int main()
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1, 1);
+		// glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1, 1);
+		// glOrtho(0, WIDTH, 0, HEIGHT, -1, 1);
+		glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		display();

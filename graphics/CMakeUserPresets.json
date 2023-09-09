@@ -4,6 +4,6 @@
         "conan": {}
     },
     "include": [
-        "/Users/armando/opengl/graphics/build/Release/generators/CMakePresets.json"
+        "C:\\Users\\Armando Salazar\\Desktop\\opengl\\graphics\\build\\generators\\CMakePresets.json"
     ]
 }
