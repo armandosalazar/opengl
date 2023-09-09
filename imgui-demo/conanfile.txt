@@ -1,5 +1,7 @@
 [requires]
-imgui/cci.20230105+1.89.2.docking
+imgui/1.89.8
+glfw/3.3.8
+glew/2.2.0
 
 [generators]
 CMakeDeps
