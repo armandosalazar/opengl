@@ -7,7 +7,8 @@
 
 #define GL_SILENCE_DEPRECATION 1
 
-#include <OpenGL/gl.h>
+// #include <OpenGL/gl.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "graphics.h"

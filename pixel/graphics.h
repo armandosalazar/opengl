@@ -2,7 +2,8 @@
 // Created by Armando Salazar on 05/09/23.
 //
 
-#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
+#include <GL/glew.h>
 #include <math.h>
 
 #ifndef OPEN_GL_PIXEL_GRAPHICS_H
