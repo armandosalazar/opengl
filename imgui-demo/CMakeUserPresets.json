@@ -4,6 +4,6 @@
         "conan": {}
     },
     "include": [
-        "/Users/armando/opengl/imgui-conan/build/CMakePresets.json"
+        "/Users/armando/opengl/imgui-demo/build/CMakePresets.json"
     ]
 }

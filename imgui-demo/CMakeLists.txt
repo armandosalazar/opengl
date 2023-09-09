@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(ImGui-Demo CXX)
+project(ImGuiDemo CXX)
 
 find_package(imgui REQUIRED)
 find_package(glew REQUIRED)
