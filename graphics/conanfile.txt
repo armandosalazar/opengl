@@ -1,5 +1,5 @@
 [requires]
-imgui/1.89.8
+imgui/cci.20230105+1.89.2.docking
 glfw/3.3.8
 glew/2.2.0
 
