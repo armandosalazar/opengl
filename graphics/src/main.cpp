@@ -7,7 +7,20 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "graphics.h"
 #include "events.h"
+
+void display()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0, 1.0, 1.0);
+	glPointSize(2.0);
+	// putPixel(100, 100);
+	glBegin(GL_POINTS);
+	glVertex2i(100, 100);
+	glEnd();
+	glFlush();
+}
 
 void glfwErrorCallback(int error, const char *description)
 {
@@ -34,7 +47,7 @@ int main()
 #endif
 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	GLFWwindow *window = glfwCreateWindow(800, 500, "Graphics", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Graphics", NULL, NULL);
 
 	if (!window)
 	{
@@ -45,7 +58,7 @@ int main()
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, keyCallback);
-	glfwSwapInterval(1);
+	// glfwSwapInterval(1);
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -67,14 +80,20 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
-		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		display();
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::ShowDemoWindow();
+		// ImGui::ShowDemoWindow();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -82,6 +101,9 @@ int main()
 		int display_w, display_h;
 		glfwGetFramebufferSize(window, &display_w, &display_h);
 		glViewport(0, 0, display_w, display_h);
+		std::cout << display_w << " " << display_h << std::endl;
+
+
 		glfwSwapBuffers(window);
 	}
 
