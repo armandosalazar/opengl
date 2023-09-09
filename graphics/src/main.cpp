@@ -44,6 +44,8 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #else
 	const char* glsl_version = "#version 130";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 #endif
 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -68,6 +70,10 @@ int main()
 
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
+	int screenWidth, screenHeight;
+	glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+	glViewport(0, 0, screenWidth, screenHeight);
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
@@ -80,20 +86,20 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
-		// glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 
-		// int display_w, display_h;
-		// glfwGetFramebufferSize(window, &display_w, &display_h);
-		// glViewport(0, 0, display_w, display_h);
-		// std::cout << display_w << " " << display_h << std::endl;
-		// glMatrixMode(GL_PROJECTION);
-		// glLoadIdentity();
-		// glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1, 1);
-		// // glOrtho(0, WIDTH, 0, HEIGHT, -1, 1);
-		// // glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
-		// glMatrixMode(GL_MODELVIEW);
-		// glLoadIdentity();
-		// display();
+		int display_w, display_h;
+		glfwGetFramebufferSize(window, &display_w, &display_h);
+		glViewport(0, 0, display_w, display_h);
+		std::cout << display_w << " " << display_h << std::endl;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1, 1);
+		// glOrtho(0, WIDTH, 0, HEIGHT, -1, 1);
+		// glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		display();
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
