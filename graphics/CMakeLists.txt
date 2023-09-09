@@ -11,7 +11,7 @@ add_executable(${PROJECT_NAME}
     src/imgui_impl_glfw.h
     src/imgui_impl_opengl3.cpp
     src/imgui_impl_opengl3.h
-    )
+     "src/events.h" "src/events.cpp")
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

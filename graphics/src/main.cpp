@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "events.h"
+
 void glfwErrorCallback(int error, const char *description)
 {
 	std::cout << "GLFW Error " << error << ": " << description << std::endl;
@@ -42,6 +44,7 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
+	glfwSetKeyCallback(window, keyCallback);
 	glfwSwapInterval(1);
 
 	if (glewInit() != GLEW_OK)
@@ -71,9 +74,7 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::Begin("Demo window");
-		ImGui::Button("Hello!");
-		ImGui::Button("Hello!");
+		ImGui::Begin("Demo Window");
 		ImGui::End();
 
 		ImGui::Render();
