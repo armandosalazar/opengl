@@ -5,6 +5,7 @@
 // #include <GLFW/glfw3.h>
 #include <GL/glew.h>
 #include <math.h>
+#include "graphics.h"
 
 #ifndef OPEN_GL_PIXEL_GRAPHICS_H
 #define OPEN_GL_PIXEL_GRAPHICS_H
@@ -15,7 +16,10 @@ void putPixel(int x, int y) {
     glEnd();
 }
 
-void lineDDA(int x1, int y1, int x2, int y2) {
+
+inline void drawLineDDA(int x1, int y1, int x2, int y2)
+{
+}void lineDDA(int x1, int y1, int x2, int y2) {
     int dx = x2 - x1;
     int dy = y2 - y1;
     int steps, k;
