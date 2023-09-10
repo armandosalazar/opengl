@@ -102,8 +102,8 @@ int main()
 		ImGui::End();
 
 		// Renderiza la ventana de ImGui
-		// ImGui::Render();
-		// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Intercambia los buffers
 		glfwSwapBuffers(window);
