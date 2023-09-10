@@ -1,29 +1,52 @@
 #include <iostream>
 
+#include "imgui.h"
+#include "../lib/imgui_impl_glfw.h"
+#include "../lib/imgui_impl_opengl3.h"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Graphics.h"
+#include "graphics.h"
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-int opt = 1;
+int OPTION = 1;
 
-void glfwErrorCallback(int error, const char* description);
-void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void glfwErrorCallback(int error, const char *description);
+void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 void display();
 
-int main() {
+int main()
+{
 	glfwSetErrorCallback(glfwErrorCallback);
 
-	if (!glfwInit()) {
+	if (!glfwInit())
+	{
 		std::cerr << "Failed to initialize GLFW" << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Graficos", NULL, NULL);
+#if __APPLE__
+	// GL 3.2 + GLSL 150
+	const char *glsl_version = "#version 150";
+	// glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	// glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		   // Required on Mac
+#else
+	// GL 3.0 + GLSL 130
+	const char *glsl_version = "#version 130";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+#endif
 
-	if (!window) {
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Gráficos", NULL, NULL);
+
+	if (!window)
+	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return EXIT_FAILURE;
@@ -33,21 +56,33 @@ int main() {
 	glfwSetKeyCallback(window, glfwKeyCallback);
 	glfwSwapInterval(1);
 
-	if (glewInit() != GLEW_OK) {
+	if (glewInit() != GLEW_OK)
+	{
 		std::cerr << "Failed to initialize GLEW" << std::endl;
 		glfwTerminate();
 		return EXIT_FAILURE;
 	}
 
-	while (!glfwWindowShouldClose(window)) {
+	int display_w, display_h;
+	glfwGetFramebufferSize(window, &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO &io = ImGui::GetIO();
+
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init();
+
+	while (!glfwWindowShouldClose(window))
+	{
+		// Limpia la pantalla
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Define el plano de proyeccion
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2, -1, 1);
-
 
 		// Define la matriz de modelo y vista
 		glMatrixMode(GL_MODELVIEW);
@@ -56,51 +91,94 @@ int main() {
 		// Dibuja
 		display();
 
+		// Inicia el nuevo frame de ImGui
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 
+		// Crea la ventana de ImGui
+		ImGui::Begin("Gráficos");
+		ImGui::Text("Opciones:");
+		ImGui::End();
+
+		// Renderiza la ventana de ImGui
+		// ImGui::Render();
+		// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		// Intercambia los buffers
 		glfwSwapBuffers(window);
-
+		// Poll for and process events
 		glfwPollEvents();
-
-		// Cambiar opci�n
-
-		// Imprimir fps
-		std::cout << "FPS: " << 1 / glfwGetTime() << std::endl;	
-		std::cout << "Opcion: " << opt << std::endl;
-		system("cls");
-
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
+
 	return EXIT_SUCCESS;
 }
 
-void glfwErrorCallback(int error, const char* description)
+void glfwErrorCallback(int error, const char *description)
 {
 	std::cerr << "GLFW Error: " << description << std::endl;
 }
 
-void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ESCAPE)
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-	if (key == GLFW_KEY_N) {
-		std::cout << "N" << std::endl;
-		opt++;
-		if (opt > 2) opt = 1;
+	if (key == GLFW_KEY_N && action == GLFW_PRESS)
+	{
+		std::cout << "Presionaste la tecla N" << std::endl;
+		OPTION++;
+		if (OPTION > 6)
+		{
+			OPTION = 1;
+		}
 	}
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
 void display()
 {
-	switch (opt) {
-	case 1: {
+	switch (OPTION)
+	{
+	case 1:
+	{
 		glColor3f(1.0f, 0.0f, 0.0f);
 		PutPixel(0, 0);
 		break;
 	}
-	case 2: {
-		glColor3f(1.0f, 0.0f, 0.0f);
-		PutPixel(0, 0);
-		PutPixel(1, 0);
-		PutPixel(0, 1);
+	case 2:
+	{
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawLineDDA(0, 0, 100, 100);
+		break;
+	}
+	case 3:
+	{
+		glColor3f(0.0f, 0.0f, 1.0f);
+		DrawLineDDA(0, 0, -100, -100);
+		break;
+	}
+	case 4:
+	{
+		glColor3f(1.0f, 0.0f, 1.0f);
+		DrawLineBresenham(0, 0, -100, 0);
+		break;
+	}
+	case 5:
+	{
+		glColor3f(1.0f, 1.0f, 0.0f);
+		DrawLineMidPoint(0, 0, 100, -100);
+		break;
+	}
+	case 6:
+	{
+		glColor3f(1.0f, 1.0f, 1.0f);
+		DrawCircleMidPoint(0, 0, 100);
 		break;
 	}
 	}
