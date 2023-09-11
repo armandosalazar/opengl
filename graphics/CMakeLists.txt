@@ -15,8 +15,10 @@ add_executable(${PROJECT_NAME}
 	"src/graphics.h"
 	"src/graphics.cpp")
 
+target_compile_definitions(${PROJECT_NAME}
+	PUBLIC
+	IMGUI_IMPL_OPENGL_LOADER_GLEW)
 target_link_libraries(${PROJECT_NAME}
-	PRIVATE
 	imgui::imgui
 	GLEW::GLEW
 	glfw)

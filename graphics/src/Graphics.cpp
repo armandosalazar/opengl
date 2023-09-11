@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 
-#include "Graphics.h"
+#include "graphics.h"
 
 void PutPixel(int x, int y)
 {
