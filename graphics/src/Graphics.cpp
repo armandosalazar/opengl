@@ -169,5 +169,17 @@ void DrawCircleMidPoint(int xc, int yc, int radius)
 
 void DrawCircleBresenham(int xc, int yc, int radius)
 {
-	
+}
+
+void DrawCircleBasic(int x1, int y1, int xc, int yc)
+{
+	int radius = sqrt(pow(x1 - xc, 2) + pow(y1 - yc, 2));
+
+	for (int x = xc - radius; x <= xc + radius; x++)
+	{
+		int yTop = (int)(yc + sqrt(pow(radius, 2) - pow((x - xc), 2)));
+		int yBottom = (int)(yc - sqrt(pow(radius, 2) - pow((x - xc), 2)));
+		PutPixel(x, yTop);
+		PutPixel(x, yBottom);
+	}
 }
