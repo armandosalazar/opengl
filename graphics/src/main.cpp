@@ -32,6 +32,8 @@ int main()
 		return EXIT_FAILURE;
 	}
 
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
 	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Gráficos", NULL, NULL);
 
 	if (!window)
@@ -89,16 +91,6 @@ int main()
 
 		// Dibuja
 		displayFunction();
-
-		// Comenzar a dibujar con NanoVG
-		nvgBeginFrame(vg, WIDTH, HEIGHT, 1.0f);
-		// Finalizar el dibujo con NanoVG
-		nvgBeginPath(vg);
-		nvgRect(vg, 0, 0, 100, 100);
-		nvgFillColor(vg, nvgRGBA(255, 0, 0, 255));
-		nvgFill(vg);
-
-		nvgEndFrame(vg);
 
 		// Intercambia los buffers
 		glfwSwapBuffers(window);
@@ -235,6 +227,7 @@ void displayFunction()
 		DrawCircleMidPoint(0, 0, 30);
 		glColor3f(0.0f, 1.0f, 0.0f);
 		DrawRectangle(100, 0, 200, 50);
+		glColor3f(0.0f, 0.0f, 1.0f);
 		DrawRectangle(110, 10, 190, 40);
 		glColor3f(0.0f, 1.0f, 1.0f);
 		DrawEllipseMidPoint(-200, 0, 100, 50);
@@ -256,9 +249,11 @@ void setWindowTitle(GLFWwindow *window, const char *title)
 
 bool loadFonts()
 {
-	if (nvgCreateFont(vg, "sans", "./Roboto-Regular.ttf") == -1)
+	if (nvgCreateFont(vg, "retro", "assets/retro-gaming.ttf") == -1)
 		return false;
-	else if (nvgCreateFont(vg, "retro", "./retro-gaming.ttf") == -1)
+	else if (nvgCreateFont(vg, "sans", "assets/droidsans.ttf") == -1)
+		return false;
+	else if (nvgCreateFont(vg, "mono", "assets/bmonofont-i18n.ttf") == -1)
 		return false;
 	else
 		return true;
