@@ -18,6 +18,7 @@ void glfwErrorCallback(int error, const char *description);
 void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 void displayFunction();
 void setWindowTitle(GLFWwindow *window, const char *title);
+bool loadFonts(NVGcontext *vg);
 
 int main()
 {
@@ -58,6 +59,13 @@ int main()
 		return EXIT_FAILURE;
 	}
 
+	if (!loadFonts(vg))
+	{
+		std::cerr << "Failed to load fonts" << std::endl;
+		glfwTerminate();
+		return EXIT_FAILURE;
+	}
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Viewport
@@ -81,16 +89,17 @@ int main()
 		displayFunction();
 
 		// Comenzar a dibujar con NanoVG
-        nvgBeginFrame(vg, WIDTH, HEIGHT, 1.0f);
+		nvgBeginFrame(vg, WIDTH, HEIGHT, 1.0f);
 
-        // Dibujar una forma con NanoVG
-        nvgBeginPath(vg);
-        nvgRect(vg, 0, 0, 10, 10);
-        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
-        nvgFill(vg);
+		// Hola Mundo
+		nvgFontSize(vg, 18.0f);
+		nvgFontFace(vg, "monospaced");
+		nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+		nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
+		nvgText(vg, 320, 20, "Hola Mundo", NULL);
 
-        // Finalizar el dibujo con NanoVG
-        nvgEndFrame(vg);
+		// Finalizar el dibujo con NanoVG
+		nvgEndFrame(vg);
 
 		// Intercambia los buffers
 		glfwSwapBuffers(window);
@@ -242,4 +251,14 @@ void displayFunction()
 void setWindowTitle(GLFWwindow *window, const char *title)
 {
 	glfwSetWindowTitle(window, title);
+}
+
+bool loadFonts(NVGcontext *vg)
+{
+	if (nvgCreateFont(vg, "sans", "./Roboto-Regular.ttf") == -1)
+		return false;
+	else if (nvgCreateFont(vg, "monospaced", "./retro-gaming.ttf") == -1)
+		return false;
+	else
+		return true;
 }
