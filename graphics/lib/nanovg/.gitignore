@@ -27,6 +27,6 @@ build/*
 ## xcode specific
 *xcuserdata*
 
-*
-!.gitignore
-!src/*
+example/
+obsolete/
+
