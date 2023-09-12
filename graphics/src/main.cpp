@@ -11,7 +11,7 @@
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-const int numOptions = 11;
+const int numOptions = 12;
 int option = 1;
 
 NVGcontext *vg;
@@ -161,54 +161,61 @@ void displayFunction()
 	}
 	case 4:
 	{
+		setTitle("Línea Recta");
+		glColor3f(0.0f, 0.0f, 1.0f);
+		DrawLineBresenham(0, 0, 200, 0);
+		break;
+	}
+	case 5:
+	{
 		setTitle("Línea Bresenham");
 		glColor3f(1.0f, 0.0f, 1.0f);
 		DrawLineBresenham(0, 0, -100, 0);
 		break;
 	}
-	case 5:
+	case 6:
 	{
 		setTitle("Línea Punto Medio");
 		glColor3f(1.0f, 1.0f, 0.0f);
 		DrawLineMidPoint(0, 0, 100, -100);
 		break;
 	}
-	case 6:
+	case 7:
 	{
 		setTitle("Círculo Punto Medio");
 		glColor3f(1.0f, 1.0f, 1.0f);
 		DrawCircleMidPoint(0, 0, 100);
 		break;
 	}
-	case 7:
+	case 8:
 	{
 		setTitle("Círculo Básico");
 		glColor3f(1.0f, 0.0f, 0.0f);
 		DrawCircleBasic(100, 100, 0, 0);
 		break;
 	}
-	case 8:
+	case 9:
 	{
 		setTitle("Círculo Coordenadas Polares");
 		glColor3f(0.0f, 1.0f, 0.0f);
 		DrawCirclePolarCoordinates(0, 0, 100);
 		break;
 	}
-	case 9:
+	case 10:
 	{
 		setTitle("Elipse Punto Medio");
 		glColor3f(0.0f, 0.0f, 1.0f);
 		DrawEllipseMidPoint(0, 0, 100, 50);
 		break;
 	}
-	case 10:
+	case 11:
 	{
 		setTitle("Rectángulo");
 		glColor3f(1.0f, 0.0f, 1.0f);
 		DrawRectangle(0, 0, 100, 50);
 		break;
 	}
-	case 11:
+	case 12:
 	{
 		setTitle("Figuras");
 		glColor3f(1.0f, 1.0f, 1.0f);
