@@ -11,8 +11,8 @@
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-const int NUM_OPTIONS = 11;
-int OPTION = 1;
+const int numOptions = 11;
+int option = 1;
 
 void glfwErrorCallback(int error, const char *description);
 void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
@@ -49,11 +49,14 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	// int display_w, display_h;
-	// glfwGetFramebufferSize(window, &display_w, &display_h);
-	// glViewport(0, 0, display_w, display_h);
+	NVGcontext *vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
-	struct NVGcontext *vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+	if (vg == NULL)
+	{
+		std::cerr << "Failed to initialize NanoVG" << std::endl;
+		glfwTerminate();
+		return EXIT_FAILURE;
+	}
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -64,20 +67,6 @@ int main()
 
 		// Limpia la pantalla
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		// Comienza un nuevo marco de NanoVG
-		nvgBeginFrame(vg, WIDTH / 2, HEIGHT & 2, 1.0f);
-
-		// Establece el tamaño de la fuente y el color
-		nvgFontSize(vg, 48.0f);
-		nvgFontFace(vg, "sans");
-		nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color blanco
-
-		// Renderiza texto en la posición (100, 100)
-		nvgText(vg, 100, 100, "Hello, NanoVG!", NULL);
-
-		// Finaliza el marco de NanoVG
-		nvgEndFrame(vg);
 
 		// Define el plano de proyeccion
 		glMatrixMode(GL_PROJECTION);
@@ -91,11 +80,25 @@ int main()
 		// Dibuja
 		displayFunction();
 
+		// Comenzar a dibujar con NanoVG
+        nvgBeginFrame(vg, WIDTH, HEIGHT, 1.0f);
+
+        // Dibujar una forma con NanoVG
+        nvgBeginPath(vg);
+        nvgRect(vg, 0, 0, 10, 10);
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
+        nvgFill(vg);
+
+        // Finalizar el dibujo con NanoVG
+        nvgEndFrame(vg);
+
 		// Intercambia los buffers
 		glfwSwapBuffers(window);
 		// Poll for and process events
 		glfwPollEvents();
 	}
+
+	nvgDeleteGL2(vg);
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -112,18 +115,18 @@ void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int 
 {
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
 	{
-		OPTION++;
-		if (OPTION > NUM_OPTIONS)
+		option++;
+		if (option > numOptions)
 		{
-			OPTION = 1;
+			option = 1;
 		}
 	}
 	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
 	{
-		OPTION--;
-		if (OPTION < 1)
+		option--;
+		if (option < 1)
 		{
-			OPTION = NUM_OPTIONS;
+			option = numOptions;
 		}
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -132,7 +135,7 @@ void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int 
 
 void displayFunction()
 {
-	switch (OPTION)
+	switch (option)
 	{
 	case 1:
 	{
