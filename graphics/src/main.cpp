@@ -14,11 +14,13 @@ const int HEIGHT = 480;
 const int numOptions = 11;
 int option = 1;
 
+NVGcontext *vg;
+
 void glfwErrorCallback(int error, const char *description);
 void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 void displayFunction();
-void setWindowTitle(GLFWwindow *window, const char *title);
-bool loadFonts(NVGcontext *vg);
+bool loadFonts();
+void setTitle(const char *title);
 
 int main()
 {
@@ -50,7 +52,7 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	NVGcontext *vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+	vg = nvgCreateGL2(NVG_STENCIL_STROKES);
 
 	if (vg == NULL)
 	{
@@ -59,7 +61,7 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	if (!loadFonts(vg))
+	if (!loadFonts())
 	{
 		std::cerr << "Failed to load fonts" << std::endl;
 		glfwTerminate();
@@ -90,15 +92,12 @@ int main()
 
 		// Comenzar a dibujar con NanoVG
 		nvgBeginFrame(vg, WIDTH, HEIGHT, 1.0f);
-
-		// Hola Mundo
-		nvgFontSize(vg, 18.0f);
-		nvgFontFace(vg, "monospaced");
-		nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-		nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
-		nvgText(vg, 320, 20, "Hola Mundo", NULL);
-
 		// Finalizar el dibujo con NanoVG
+		nvgBeginPath(vg);
+		nvgRect(vg, 0, 0, 100, 100);
+		nvgFillColor(vg, nvgRGBA(255, 0, 0, 255));
+		nvgFill(vg);
+
 		nvgEndFrame(vg);
 
 		// Intercambia los buffers
@@ -144,81 +143,82 @@ void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int 
 
 void displayFunction()
 {
+	nvgBeginFrame(vg, WIDTH, HEIGHT, 1.0f);
 	switch (option)
 	{
 	case 1:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Punto");
+		setTitle("Punto");
 		glColor3f(1.0f, 0.0f, 0.0f);
 		PutPixel(0, 0);
 		break;
 	}
 	case 2:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Línea DDA: (0, 0), (100, 100)");
+		setTitle("Línea DDA - ID");
 		glColor3f(0.0f, 1.0f, 0.0f);
 		DrawLineDDA(0, 0, 100, 100);
 		break;
 	}
 	case 3:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Línea DDA: (0, 0), (-100, -100)");
+		setTitle("Línea DDA - DI");
 		glColor3f(0.0f, 0.0f, 1.0f);
 		DrawLineDDA(0, 0, -100, -100);
 		break;
 	}
 	case 4:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Línea Bresenham: (0, 0), (-100, 0)");
+		setTitle("Línea Bresenham");
 		glColor3f(1.0f, 0.0f, 1.0f);
 		DrawLineBresenham(0, 0, -100, 0);
 		break;
 	}
 	case 5:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Línea Punto Medio: (0, 0), (100, -100)");
+		setTitle("Línea Punto Medio");
 		glColor3f(1.0f, 1.0f, 0.0f);
 		DrawLineMidPoint(0, 0, 100, -100);
 		break;
 	}
 	case 6:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Círculo Punto Medio: (0, 0), (100, 100)");
+		setTitle("Círculo Punto Medio");
 		glColor3f(1.0f, 1.0f, 1.0f);
 		DrawCircleMidPoint(0, 0, 100);
 		break;
 	}
 	case 7:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Círculo Básico: (100, 100), (0, 0)");
+		setTitle("Círculo Básico");
 		glColor3f(1.0f, 0.0f, 0.0f);
 		DrawCircleBasic(100, 100, 0, 0);
 		break;
 	}
 	case 8:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Círculo Coordenadas Polares: (0, 0), (100, 100)");
+		setTitle("Círculo Coordenadas Polares");
 		glColor3f(0.0f, 1.0f, 0.0f);
 		DrawCirclePolarCoordinates(0, 0, 100);
 		break;
 	}
 	case 9:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Elipse Punto Medio: (0, 0), (100, 50)");
+		setTitle("Elipse Punto Medio");
 		glColor3f(0.0f, 0.0f, 1.0f);
 		DrawEllipseMidPoint(0, 0, 100, 50);
 		break;
 	}
 	case 10:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Rectángulo: (0, 0), (100, 50)");
+		setTitle("Rectángulo");
 		glColor3f(1.0f, 0.0f, 1.0f);
 		DrawRectangle(0, 0, 100, 50);
 		break;
 	}
 	case 11:
 	{
-		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Figuras");
+		setTitle("Figuras");
 		glColor3f(1.0f, 1.0f, 1.0f);
 		DrawLineBresenham(-310, 190, -220, 100);
 		glColor3f(1.0f, 0.0f, 0.0f);
@@ -246,6 +246,7 @@ void displayFunction()
 		DrawEllipseMidPoint(-200, 0, 12, 6);
 	}
 	}
+	nvgEndFrame(vg);
 }
 
 void setWindowTitle(GLFWwindow *window, const char *title)
@@ -253,12 +254,21 @@ void setWindowTitle(GLFWwindow *window, const char *title)
 	glfwSetWindowTitle(window, title);
 }
 
-bool loadFonts(NVGcontext *vg)
+bool loadFonts()
 {
 	if (nvgCreateFont(vg, "sans", "./Roboto-Regular.ttf") == -1)
 		return false;
-	else if (nvgCreateFont(vg, "monospaced", "./retro-gaming.ttf") == -1)
+	else if (nvgCreateFont(vg, "retro", "./retro-gaming.ttf") == -1)
 		return false;
 	else
 		return true;
+}
+
+void setTitle(const char *title)
+{
+	nvgFontSize(vg, 18.0f);
+	nvgFontFace(vg, "retro");
+	nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+	nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
+	nvgText(vg, 320, 20, title, NULL);
 }
