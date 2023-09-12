@@ -167,10 +167,6 @@ void DrawCircleMidPoint(int xc, int yc, int radius)
 	}
 }
 
-void DrawCircleBresenham(int xc, int yc, int radius)
-{
-}
-
 void DrawCircleBasic(int x1, int y1, int xc, int yc)
 {
 	int radius = sqrt(pow(x1 - xc, 2) + pow(y1 - yc, 2));
@@ -182,4 +178,76 @@ void DrawCircleBasic(int x1, int y1, int xc, int yc)
 		PutPixel(x, yTop);
 		PutPixel(x, yBottom);
 	}
+}
+
+void DrawCirclePolarCoordinates(int xc, int yc, int radius)
+{
+	for (float theta = 0; theta <= 360; theta += 0.01)
+	{
+		float x = radius * cos(theta);
+		float y = radius * sin(theta);
+		PutPixel(xc + x, yc + y);
+	}
+}
+
+void DrawEllipseMidPoint(int xc, int yc, int radiusX, int radiusY)
+{
+	float x = 0;
+	float y = radiusY;
+	float d = pow(radiusY, 2) - pow(radiusX, 2) * radiusY + 0.25 * pow(radiusX, 2);
+
+	PutPixel(xc + x, yc + y);
+	PutPixel(xc + x, yc - y);
+	PutPixel(xc - x, yc + y);
+	PutPixel(xc - x, yc - y);
+
+	while (pow(radiusX, 2) * (y - 0.5) > pow(radiusY, 2) * (x + 1))
+	{
+		if (d < 0)
+		{
+			d += pow(radiusY, 2) * (2 * x + 3);
+			x++;
+		}
+		else
+		{
+			d += pow(radiusY, 2) * (2 * x + 3) + pow(radiusX, 2) * (-2 * y + 2);
+			x++;
+			y--;
+		}
+
+		PutPixel(xc + x, yc + y);
+		PutPixel(xc + x, yc - y);
+		PutPixel(xc - x, yc + y);
+		PutPixel(xc - x, yc - y);
+	}
+
+	d = pow(radiusY, 2) * pow((x + 0.5), 2) + pow(radiusX, 2) * pow((y - 1), 2) - pow(radiusX, 2) * pow(radiusY, 2);
+
+	while (y > 0)
+	{
+		if (d < 0)
+		{
+			d += pow(radiusY, 2) * (2 * x + 2) + pow(radiusX, 2) * (-2 * y + 3);
+			x++;
+			y--;
+		}
+		else
+		{
+			d += pow(radiusX, 2) * (-2 * y + 3);
+			y--;
+		}
+
+		PutPixel(xc + x, yc + y);
+		PutPixel(xc + x, yc - y);
+		PutPixel(xc - x, yc + y);
+		PutPixel(xc - x, yc - y);
+	}
+}
+
+void DrawRectangle(int x1, int y1, int x2, int y2)
+{
+	DrawLineDDA(x1, y1, x2, y1);
+	DrawLineDDA(x2, y1, x2, y2);
+	DrawLineDDA(x2, y2, x1, y2);
+	DrawLineDDA(x1, y2, x1, y1);
 }

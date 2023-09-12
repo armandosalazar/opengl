@@ -1,16 +1,17 @@
 #include <iostream>
 
 #include <GL/glew.h>
-// #define NANOVG_GL3_IMPLEMENTATION
-// #include "nanovg.h"
-// #include "nanovg_gl.h"
 #include <GLFW/glfw3.h>
+
+#define NANOVG_GL2_IMPLEMENTATION
+#include "nanovg.h"
+#include "nanovg_gl.h"
 
 #include "graphics.h"
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-const int NUM_OPTIONS = 7;
+const int NUM_OPTIONS = 11;
 int OPTION = 1;
 
 void glfwErrorCallback(int error, const char *description);
@@ -52,30 +53,31 @@ int main()
 	// glfwGetFramebufferSize(window, &display_w, &display_h);
 	// glViewport(0, 0, display_w, display_h);
 
-	// NVGcontext *vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+	struct NVGcontext *vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// Viewport
-		// glfwGetFramebufferSize(window, &display_w, &display_h);
-		// glViewport(0, 0, display_w, display_h);
+		int display_w, display_h;
+		glfwGetFramebufferSize(window, &display_w, &display_h);
+		glViewport(0, 0, display_w, display_h);
 
 		// Limpia la pantalla
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// // Comienza un nuevo marco de NanoVG
-        // nvgBeginFrame(vg, 800, 600, 1.0f);
+		// Comienza un nuevo marco de NanoVG
+		nvgBeginFrame(vg, WIDTH / 2, HEIGHT & 2, 1.0f);
 
-        // // Establece el tamaño de la fuente y el color
-        // nvgFontSize(vg, 48.0f);
-        // nvgFontFace(vg, "sans");
-        // nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color blanco
+		// Establece el tamaño de la fuente y el color
+		nvgFontSize(vg, 48.0f);
+		nvgFontFace(vg, "sans");
+		nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color blanco
 
-        // // Renderiza texto en la posición (100, 100)
-        // nvgText(vg, 100, 100, "Hello, NanoVG!", NULL);
+		// Renderiza texto en la posición (100, 100)
+		nvgText(vg, 100, 100, "Hello, NanoVG!", NULL);
 
-        // // Finaliza el marco de NanoVG
-        // nvgEndFrame(vg);
+		// Finaliza el marco de NanoVG
+		nvgEndFrame(vg);
 
 		// Define el plano de proyeccion
 		glMatrixMode(GL_PROJECTION);
@@ -94,8 +96,6 @@ int main()
 		// Poll for and process events
 		glfwPollEvents();
 	}
-
-	// nvgDeleteGL3(vg);
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -138,7 +138,6 @@ void displayFunction()
 	{
 		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Punto");
 		glColor3f(1.0f, 0.0f, 0.0f);
-		glPointSize(2.0f);
 		PutPixel(0, 0);
 		break;
 	}
@@ -183,6 +182,56 @@ void displayFunction()
 		glColor3f(1.0f, 0.0f, 0.0f);
 		DrawCircleBasic(100, 100, 0, 0);
 		break;
+	}
+	case 8:
+	{
+		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Círculo Coordenadas Polares: (0, 0), (100, 100)");
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawCirclePolarCoordinates(0, 0, 100);
+		break;
+	}
+	case 9:
+	{
+		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Elipse Punto Medio: (0, 0), (100, 50)");
+		glColor3f(0.0f, 0.0f, 1.0f);
+		DrawEllipseMidPoint(0, 0, 100, 50);
+		break;
+	}
+	case 10:
+	{
+		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Rectángulo: (0, 0), (100, 50)");
+		glColor3f(1.0f, 0.0f, 1.0f);
+		DrawRectangle(0, 0, 100, 50);
+		break;
+	}
+	case 11:
+	{
+		setWindowTitle(glfwGetCurrentContext(), "Gráficos - Figuras");
+		glColor3f(1.0f, 1.0f, 1.0f);
+		DrawLineBresenham(-310, 190, -220, 100);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		DrawLineDDA(-210, 100, 0, 100);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawLineMidPoint(10, 100, 100, 230);
+		glColor3f(0.0f, 0.0f, 1.0f);
+		DrawLineMidPoint(110, 100, 300, 100);
+		glColor3f(0.0f, 1.0f, 1.0f);
+		DrawCircleBasic(10, 10, 0, 0);
+		glColor3f(1.0f, 0.0f, 1.0f);
+		DrawCirclePolarCoordinates(0, 0, 20);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		DrawCircleMidPoint(0, 0, 30);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawRectangle(100, 0, 200, 50);
+		DrawRectangle(110, 10, 190, 40);
+		glColor3f(0.0f, 1.0f, 1.0f);
+		DrawEllipseMidPoint(-200, 0, 100, 50);
+		glColor3f(1.0f, 1.0f, 0.0f);
+		DrawEllipseMidPoint(-200, 0, 50, 25);
+		glColor3f(1.0f, 0.0f, 1.0f);
+		DrawEllipseMidPoint(-200, 0, 25, 12);
+		glColor3f(0.0f, 0.0f, 1.0f);
+		DrawEllipseMidPoint(-200, 0, 12, 6);
 	}
 	}
 }
