@@ -22,3 +22,13 @@ void FillCircleInundation(int xc, int yc, int radius);
  * @brief Fill a Circle using the Scanline Algorithm
 */
 void FillRectangleScanline(int x1, int y1, int x2, int y2);
+
+/**
+ * @brief Fill a Ellipse using the Scanline Algorithm
+*/
+void FillEllipseScanline(int xc, int yc, int radiusX, int radiusY);
+
+/**
+ * @brief Translate a point with matrix multiplication
+*/
+void TranslatePoint(int &x, int &y, int tx, int ty);
