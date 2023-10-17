@@ -251,3 +251,44 @@ void DrawRectangle(int x1, int y1, int x2, int y2)
 	DrawLineDDA(x2, y2, x1, y2);
 	DrawLineDDA(x1, y2, x1, y1);
 }
+
+
+/**
+ * @brief Fill a Circle using the Inundation Algorithm
+*/
+void FillCircleInundation(int xc, int yc, int radius) {
+    int x = 0;
+    int y = radius;
+    int d = 1 - radius;
+
+    while (y >= x) {
+        for (int i = xc - x; i <= xc + x; i++) {
+            PutPixel(i, yc + y);
+            PutPixel(i, yc - y);
+        }
+
+        for (int i = xc - y; i <= xc + y; i++) {
+            PutPixel(i, yc + x);
+            PutPixel(i, yc - x);
+        }
+
+        if (d < 0) {
+            d += 2 * x + 3;
+        } else {
+            d += 2 * (x - y) + 5;
+            y--;
+        }
+
+        x++;
+    }
+}
+
+/**
+ * @brief Fill a Circle using the Scanline Algorithm
+*/
+void FillRectangleScanline(int x1, int y1, int x2, int y2) {
+	for (int i = x1; i <= x2; i++) {
+		DrawLineDDA(i, y1, i, y2);
+	}
+}
+
