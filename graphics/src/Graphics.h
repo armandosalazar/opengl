@@ -32,3 +32,13 @@ void FillEllipseScanline(int xc, int yc, int radiusX, int radiusY);
  * @brief Translate a point with matrix multiplication
 */
 void TranslatePoint(int &x, int &y, int tx, int ty);
+
+/**
+ * @brief Rotate a point with matrix multiplication
+*/
+void RotatePoint(int &x, int &y, float angle);
+
+/**
+ * @brief Scale a point with matrix multiplication
+*/
+void ScalePoint(int &x, int &y, float sx, float sy);

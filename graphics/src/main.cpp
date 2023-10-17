@@ -8,7 +8,9 @@
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-int x = 0, y = 0;
+int x = 0, y = 0, center = 0, option = 0;
+const int OPTIONS = 2;
+bool flag = false;
 
 void glfwErrorCallback(int error, const char *description);
 void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
@@ -87,29 +89,99 @@ void glfwErrorCallback(int error, const char *description)
 
 void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE)
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
     {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        option++;
+        if (option > OPTIONS)
+        {
+            option = 1;
+        }
     }
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    {
+        option--;
+        if (option < 1)
+        {
+            option = OPTIONS;
+        }
+    }
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
-void DisplayFunction()
+void T()
 {
     static int frame = 0;
     glPointSize(1.5f);
 
     if (frame % 400 < 200)
     {
-        x++;
+        TranslatePoint(x, y, 1, 0);
     }
     else
     {
-        x--;
+        TranslatePoint(x, y, -1, 0);
     }
 
     // Dibuja la forma trasladada con las coordenadas modificadas
     glColor3f(1.0f, 1.0f, 1.0f);
-    FillCircleInundation(x, 0, 100);
+    FillCircleInundation(x, y, 100);
 
     frame++; // Incrementa el contador de frames
+}
+
+void R()
+{
+    static int frame = 0;
+    glPointSize(1.5f);
+
+    // Coordenadas originales del elipse
+    int ellipseX = x; // Usa las coordenadas actuales de 'x' y 'y'
+    int ellipseY = y;
+
+    // Ángulo de rotación en grados
+    float rotationSpeed = 5.0f;          // Velocidad de rotación incrementada
+    float angle = rotationSpeed * frame; // Incrementa el ángulo en cada frame
+
+    // Aplica la rotación al elipse
+    RotatePoint(ellipseX, ellipseY, angle);
+
+    // Dibuja el elipse rotado con las coordenadas modificadas
+    glColor3f(1.0f, 0.0f, 1.0f);
+    FillEllipseScanline(ellipseX, ellipseY, 50, 20);
+
+    // Restringe la traslación en el eje X a un valor máximo (por ejemplo, 200)
+    if (x > 200)
+    {
+        x = -200; // Reinicia la posición en la izquierda cuando llega al límite derecho
+    }
+
+    frame++; // Incrementa el contador de frames en cada llamada
+}
+
+void S()
+{
+    ScalePoint(center, center, x, y);
+    glColor3f(1.0f, 1.0f, 0.0f);
+    FillCircleInundation(center, center, x);
+    if (x == -100 && y == -100)
+        flag = false;
+    if (x == 100 && y == 100)
+        flag = true;
+    if (flag)
+    {
+        x--;
+        y--;
+    }
+    else
+    {
+        x++;
+        y++;
+    }
+}
+
+void DisplayFunction()
+{
+    glPointSize(1.5f);
+    S();
 }

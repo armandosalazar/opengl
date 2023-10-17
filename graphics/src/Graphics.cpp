@@ -252,83 +252,139 @@ void DrawRectangle(int x1, int y1, int x2, int y2)
 	DrawLineDDA(x1, y2, x1, y1);
 }
 
-
 /**
  * @brief Fill a Circle using the Inundation Algorithm
-*/
-void FillCircleInundation(int xc, int yc, int radius) {
-    int x = 0;
-    int y = radius;
-    int d = 1 - radius;
+ */
+void FillCircleInundation(int xc, int yc, int radius)
+{
+	int x = 0;
+	int y = radius;
+	int d = 1 - radius;
 
-    while (y >= x) {
-        for (int i = xc - x; i <= xc + x; i++) {
-            PutPixel(i, yc + y);
-            PutPixel(i, yc - y);
-        }
+	while (y >= x)
+	{
+		for (int i = xc - x; i <= xc + x; i++)
+		{
+			PutPixel(i, yc + y);
+			PutPixel(i, yc - y);
+		}
 
-        for (int i = xc - y; i <= xc + y; i++) {
-            PutPixel(i, yc + x);
-            PutPixel(i, yc - x);
-        }
+		for (int i = xc - y; i <= xc + y; i++)
+		{
+			PutPixel(i, yc + x);
+			PutPixel(i, yc - x);
+		}
 
-        if (d < 0) {
-            d += 2 * x + 3;
-        } else {
-            d += 2 * (x - y) + 5;
-            y--;
-        }
+		if (d < 0)
+		{
+			d += 2 * x + 3;
+		}
+		else
+		{
+			d += 2 * (x - y) + 5;
+			y--;
+		}
 
-        x++;
-    }
+		x++;
+	}
 }
 
 /**
  * @brief Fill a Circle using the Scanline Algorithm
-*/
-void FillRectangleScanline(int x1, int y1, int x2, int y2) {
-	for (int i = x1; i <= x2; i++) {
+ */
+void FillRectangleScanline(int x1, int y1, int x2, int y2)
+{
+	for (int i = x1; i <= x2; i++)
+	{
 		DrawLineDDA(i, y1, i, y2);
 	}
 }
 
-
 /**
  * @brief Fill a Ellipse using the Scanline Algorithm
-*/
-void FillEllipseScanline(int xc, int yc, int radiusX, int radiusY) {
-    for (int y = yc - radiusY; y <= yc + radiusY; y++) {
-        int x1 = xc - radiusX;
-        int x2 = xc + radiusX;
-        bool inside = false;
+ */
+void FillEllipseScanline(int xc, int yc, int radiusX, int radiusY)
+{
+	for (int y = yc - radiusY; y <= yc + radiusY; y++)
+	{
+		int x1 = xc - radiusX;
+		int x2 = xc + radiusX;
+		bool inside = false;
 
-        for (int x = x1; x <= x2; x++) {
-            double dx = x - xc;
-            double dy = y - yc;
-            if ((dx * dx) / (radiusX * radiusX) + (dy * dy) / (radiusY * radiusY) <= 1.0) {
-                inside = !inside;
-                PutPixel(x, y);
-            } else if (inside) {
-                break; // Terminate the scanline if we were inside the ellipse and then went outside.
-            }
-        }
-    }
+		for (int x = x1; x <= x2; x++)
+		{
+			double dx = x - xc;
+			double dy = y - yc;
+			if ((dx * dx) / (radiusX * radiusX) + (dy * dy) / (radiusY * radiusY) <= 1.0)
+			{
+				inside = !inside;
+				PutPixel(x, y);
+			}
+			else if (inside)
+			{
+				break; // Terminate the scanline if we were inside the ellipse and then went outside.
+			}
+		}
+	}
 }
-
 
 /**
  * @brief Translate a point with matrix multiplication
-*/
-void TranslatePoint(int &x, int &y, int tx, int ty) {
+ */
+void TranslatePoint(int &x, int &y, int tx, int ty)
+{
 	int matrix[3][3] = {
 		{1, 0, tx},
 		{0, 1, ty},
-		{0, 0, 1}
-	};
+		{0, 0, 1}};
 
 	int result[3] = {0, 0, 0};
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++)
+	{
+		result[i] = matrix[i][0] * x + matrix[i][1] * y + matrix[i][2];
+	}
+
+	x = result[0];
+	y = result[1];
+}
+
+/**
+ * @brief Rotate a point with matrix multiplication
+ */
+void RotatePoint(int &x, int &y, float angle)
+{
+	float radians = angle * M_PI / 180.0f;
+
+	int matrix[3][3] = {
+		{(int)round(cos(radians)), (int)round(-sin(radians)), 0},
+		{(int)round(sin(radians)), (int)round(cos(radians)), 0},
+		{0, 0, 1}};
+
+	int result[3] = {0, 0, 0};
+
+	for (int i = 0; i < 3; i++)
+	{
+		result[i] = matrix[i][0] * x + matrix[i][1] * y + matrix[i][2];
+	}
+
+	x = result[0];
+	y = result[1];
+}
+
+/**
+ * @brief Scale a point with matrix multiplication
+ */
+void ScalePoint(int &x, int &y, float sx, float sy) {
+	int matrix[3][3] = {
+		{(int)round(sx), 0, 0},
+		{0, (int)round(sy), 0},
+		{0, 0, 1}};
+
+	int result[3] = {0, 0, 0};
+
+	for (int i = 0; i < 3; i++)
+	{
 		result[i] = matrix[i][0] * x + matrix[i][1] * y + matrix[i][2];
 	}
 

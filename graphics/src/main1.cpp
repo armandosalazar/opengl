@@ -11,7 +11,7 @@
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-const int numOptions = 12;
+const int OPTIONS = 12;
 int option = 1;
 
 NVGcontext *vg;
@@ -116,7 +116,7 @@ void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int 
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
 	{
 		option++;
-		if (option > numOptions)
+		if (option > OPTIONS)
 		{
 			option = 1;
 		}
@@ -126,7 +126,7 @@ void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int 
 		option--;
 		if (option < 1)
 		{
-			option = numOptions;
+			option = OPTIONS;
 		}
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
