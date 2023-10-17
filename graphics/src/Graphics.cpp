@@ -252,9 +252,75 @@ void DrawRectangle(int x1, int y1, int x2, int y2)
 	DrawLineDDA(x1, y2, x1, y1);
 }
 
-/**
- * @brief Fill a Circle using the Inundation Algorithm
- */
+void DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
+{
+	DrawLineDDA(x1, y1, x2, y2);
+	DrawLineDDA(x2, y2, x3, y3);
+	DrawLineDDA(x3, y3, x1, y1);
+}
+
+void DrawRhombus(int x1, int y1, int sideLength)
+{
+	int x2 = x1 + sideLength;
+	int y2 = y1 + sideLength;
+	int x3 = x1;
+	int y3 = y1 + 2 * sideLength;
+	int x4 = x1 - sideLength;
+	int y4 = y1 + sideLength;
+
+	DrawLineDDA(x1, y1, x2, y2);
+	DrawLineDDA(x2, y2, x3, y3);
+	DrawLineDDA(x3, y3, x4, y4);
+	DrawLineDDA(x4, y4, x1, y1);
+}
+
+bool IsPointInTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int x, int y)
+{
+	// Calcula las áreas de los tres subtriángulos formados por el punto (x, y)
+	double totalArea = 0.5 * fabs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+	double area1 = 0.5 * fabs(x * (y2 - y3) + x2 * (y3 - y) + x3 * (y - y2));
+	double area2 = 0.5 * fabs(x1 * (y - y3) + x * (y3 - y1) + x3 * (y1 - y));
+	double area3 = 0.5 * fabs(x1 * (y2 - y) + x2 * (y - y1) + x * (y1 - y2));
+
+	// Si la suma de las áreas de los subtriángulos es igual al área total, el punto está dentro del triángulo
+	return (totalArea == area1 + area2 + area3);
+}
+
+void FillTriangleInundation(int x1, int y1, int x2, int y2, int x3, int y3)
+{
+	// Encontrar los límites del triángulo
+	int minX = std::min({x1, x2, x3});
+	int minY = std::min({y1, y2, y3});
+	int maxX = std::max({x1, x2, x3});
+	int maxY = std::max({y1, y2, y3});
+
+	for (int x = minX; x <= maxX; x++)
+	{
+		for (int y = minY; y <= maxY; y++)
+		{
+			// Comprobar si el punto (x, y) está dentro del triángulo
+			if (IsPointInTriangle(x1, y1, x2, y2, x3, y3, x, y))
+			{
+				// Rellena el punto (x, y) aquí, por ejemplo, con DrawPixel(x, y)
+				PutPixel(x, y);
+			}
+		}
+	}
+}
+
+void FillRhombusScanline(int x1, int y1, int sideLength)
+{
+	int x2 = x1 + sideLength;
+	int y2 = y1 + sideLength;
+	int x3 = x1;
+	int y3 = y1 + 2 * sideLength;
+	int x4 = x1 - sideLength;
+	int y4 = y1 + sideLength;
+
+	FillTriangleInundation(x1, y1, x2, y2, x3, y3);
+	FillTriangleInundation(x1, y1, x3, y3, x4, y4);
+}
+
 void FillCircleInundation(int xc, int yc, int radius)
 {
 	int x = 0;
@@ -289,9 +355,6 @@ void FillCircleInundation(int xc, int yc, int radius)
 	}
 }
 
-/**
- * @brief Fill a Circle using the Scanline Algorithm
- */
 void FillRectangleScanline(int x1, int y1, int x2, int y2)
 {
 	for (int i = x1; i <= x2; i++)
@@ -300,9 +363,6 @@ void FillRectangleScanline(int x1, int y1, int x2, int y2)
 	}
 }
 
-/**
- * @brief Fill a Ellipse using the Scanline Algorithm
- */
 void FillEllipseScanline(int xc, int yc, int radiusX, int radiusY)
 {
 	for (int y = yc - radiusY; y <= yc + radiusY; y++)
@@ -328,9 +388,6 @@ void FillEllipseScanline(int xc, int yc, int radiusX, int radiusY)
 	}
 }
 
-/**
- * @brief Translate a point with matrix multiplication
- */
 void TranslatePoint(int &x, int &y, int tx, int ty)
 {
 	int matrix[3][3] = {
@@ -349,9 +406,6 @@ void TranslatePoint(int &x, int &y, int tx, int ty)
 	y = result[1];
 }
 
-/**
- * @brief Rotate a point with matrix multiplication
- */
 void RotatePoint(int &x, int &y, float angle)
 {
 	float radians = angle * M_PI / 180.0f;
@@ -372,10 +426,8 @@ void RotatePoint(int &x, int &y, float angle)
 	y = result[1];
 }
 
-/**
- * @brief Scale a point with matrix multiplication
- */
-void ScalePoint(int &x, int &y, float sx, float sy) {
+void ScalePoint(int &x, int &y, float sx, float sy)
+{
 	int matrix[3][3] = {
 		{(int)round(sx), 0, 0},
 		{0, (int)round(sy), 0},

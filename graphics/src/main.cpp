@@ -123,41 +123,39 @@ void T()
         TranslatePoint(x, y, -1, 0);
     }
 
-    // Dibuja la forma trasladada con las coordenadas modificadas
-    glColor3f(1.0f, 1.0f, 1.0f);
-    FillCircleInundation(x, y, 100);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    FillRectangleScanline(x, y, 100 + x, 100 + y);
 
-    frame++; // Incrementa el contador de frames
+    frame++;
 }
 
 void R()
 {
-    static int frame = 0;
-    glPointSize(1.5f);
+    static float angle = 0.0f;
 
-    // Coordenadas originales del elipse
-    int ellipseX = x; // Usa las coordenadas actuales de 'x' y 'y'
-    int ellipseY = y;
+    int x1 = -50;  // Coordenadas del vértice superior izquierdo del rectángulo
+    int y1 = 50;
+    int x2 = 50;   // Coordenadas del vértice inferior derecho del rectángulo
+    int y2 = -50;
 
-    // Ángulo de rotación en grados
-    float rotationSpeed = 5.0f;          // Velocidad de rotación incrementada
-    float angle = rotationSpeed * frame; // Incrementa el ángulo en cada frame
+    // Definir el punto de rotación
+    int x0 = 0;
+    int y0 = 0;
 
-    // Aplica la rotación al elipse
-    RotatePoint(ellipseX, ellipseY, angle);
+    // Rotar los vértices del rectángulo
+    RotatePoint(x1, y1, angle);
+    RotatePoint(x2, y1, angle);
+    RotatePoint(x2, y2, angle);
+    RotatePoint(x1, y2, angle);
 
-    // Dibuja el elipse rotado con las coordenadas modificadas
-    glColor3f(1.0f, 0.0f, 1.0f);
-    FillEllipseScanline(ellipseX, ellipseY, 50, 20);
+    // Dibujar el rectángulo relleno con las coordenadas rotadas
+    FillRectangleScanline(x1, y1, x2, y2);
 
-    // Restringe la traslación en el eje X a un valor máximo (por ejemplo, 200)
-    if (x > 200)
-    {
-        x = -200; // Reinicia la posición en la izquierda cuando llega al límite derecho
-    }
-
-    frame++; // Incrementa el contador de frames en cada llamada
+    // Incrementar el ángulo en cada llamada para animar la rotación
+    angle += 1.0f;
 }
+
+
 
 void S()
 {
@@ -183,5 +181,8 @@ void S()
 void DisplayFunction()
 {
     glPointSize(1.5f);
-    S();
+    glColor3f(1.0f, 1.0f, 0.4f);
+
+    // FillTriangleInundation(-100, -100, 100, -100, 0, 100);
+    T();
 }
