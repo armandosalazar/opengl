@@ -406,26 +406,6 @@ void TranslatePoint(int &x, int &y, int tx, int ty)
 	y = result[1];
 }
 
-void RotatePoint(int &x, int &y, float angle)
-{
-	float radians = angle * M_PI / 180.0f;
-
-	int matrix[3][3] = {
-		{(int)round(cos(radians)), (int)round(-sin(radians)), 0},
-		{(int)round(sin(radians)), (int)round(cos(radians)), 0},
-		{0, 0, 1}};
-
-	int result[3] = {0, 0, 0};
-
-	for (int i = 0; i < 3; i++)
-	{
-		result[i] = matrix[i][0] * x + matrix[i][1] * y + matrix[i][2];
-	}
-
-	x = result[0];
-	y = result[1];
-}
-
 void ScalePoint(int &x, int &y, float sx, float sy)
 {
 	int matrix[3][3] = {
@@ -442,4 +422,22 @@ void ScalePoint(int &x, int &y, float sx, float sy)
 
 	x = result[0];
 	y = result[1];
+}
+
+void RotatePoint(int &x, int &y, int xc, int yc, float angle)
+{
+	int matrix[3][3] = {
+		{(int)round(cos(angle)), (int)round(sin(angle)), 0},
+		{(int)round(-sin(angle)), (int)round(cos(angle)), 0},
+		{0, 0, 1}};
+
+	int result[3] = {0, 0, 0};
+
+	for (int i = 0; i < 3; i++)
+	{
+		result[i] = matrix[i][0] * (x - xc) + matrix[i][1] * (y - yc) + matrix[i][2];
+	}
+
+	x = result[0] + xc;
+	y = result[1] + yc;
 }

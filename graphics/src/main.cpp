@@ -131,31 +131,30 @@ void T()
 
 void R()
 {
-    static float angle = 0.0f;
+    /**
+     * Use this function here with triangle
+     void RotatePoint(int &x, int &y, int xc, int yc, float angle)
+    {
+        int matrix[3][3] = {
+            {(int)round(cos(angle)), (int)round(sin(angle)), 0},
+            {(int)round(-sin(angle)), (int)round(cos(angle)), 0},
+            {0, 0, 1}};
 
-    int x1 = -50;  // Coordenadas del vértice superior izquierdo del rectángulo
-    int y1 = 50;
-    int x2 = 50;   // Coordenadas del vértice inferior derecho del rectángulo
-    int y2 = -50;
+        int result[3] = {0, 0, 0};
 
-    // Definir el punto de rotación
-    int x0 = 0;
-    int y0 = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            result[i] = matrix[i][0] * (x - xc) + matrix[i][1] * (y - yc) + matrix[i][2];
+        }
 
-    // Rotar los vértices del rectángulo
-    RotatePoint(x1, y1, angle);
-    RotatePoint(x2, y1, angle);
-    RotatePoint(x2, y2, angle);
-    RotatePoint(x1, y2, angle);
+        x = result[0] + xc;
+        y = result[1] + yc;
+    }
+    */
 
-    // Dibujar el rectángulo relleno con las coordenadas rotadas
-    FillRectangleScanline(x1, y1, x2, y2);
-
-    // Incrementar el ángulo en cada llamada para animar la rotación
-    angle += 1.0f;
+    static int frame = 0;
+    glPointSize(1.5f);
 }
-
-
 
 void S()
 {
@@ -183,6 +182,5 @@ void DisplayFunction()
     glPointSize(1.5f);
     glColor3f(1.0f, 1.0f, 0.4f);
 
-    // FillTriangleInundation(-100, -100, 100, -100, 0, 100);
-    T();
+    R();
 }
